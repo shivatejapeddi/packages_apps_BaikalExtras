@@ -585,29 +585,6 @@ public class AppProfileFragment extends BaseSettingsFragment
                 });
             }
 
-            mAppLocation = (ListPreference) findPreference(APP_PROFILE_LOCATION);
-            if( mAppLocation != null ) {
-                    int level = mProfile.mLocationLevel;
-                    Log.e(TAG, "mAppLocation: mPackageName=" + mPackageName + ",level=" + level);
-                    mAppLocation.setValue(Integer.toString(level));
-                    mAppLocation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                      public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        try {
-                            int val = Integer.parseInt(newValue.toString());
-                            mProfile.mLocationLevel = val;
-                            mAppSettings.updateProfile(mProfile);
-                            mAppSettings.save();
-
-                            //mBaikalService.setAppBrightness(mPackageName, val );
-                            Log.e(TAG, "mAppLocation: mPackageName=" + mPackageName + ",level=" + val);
-                        } catch(Exception re) {
-                            Log.e(TAG, "onCreate: mAppLocation Fatal! exception", re );
-                        }
-                        return true;
-                      }
-                    });
-            }
-
             mAppSpoofProfile = (ListPreference) findPreference(APP_PROFILE_SPOOF);
             if( mAppSpoofProfile != null ) {
                     int spoof = mProfile.mSpoofDevice;
