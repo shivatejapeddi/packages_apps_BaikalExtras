@@ -34,15 +34,6 @@
         android:summary="@string/fp_wake_unlock_summary"
         android:defaultValue="true" />      
 
-
-
-    <com.aicp.gear.preference.GlobalSettingSwitchPreference
-        android:key="baikalos_statusbar_color_icons"
-        android:title="@string/baikalos_statusbar_color_icons_title"
-        android:summary="@string/baikalos_statusbar_color_icons_summary"
-        android:defaultValue="false"
-        android:disableDependentsState="true" />
-
     <com.aicp.gear.preference.GlobalSettingSwitchPreference
         android:key="baikalos_dlsb_enabled"
         android:title="@string/baikalos_dlsb_enabled_title"
@@ -100,81 +91,5 @@
             android:dependency="sysui_rounded_fwvals" />
     </PreferenceCategory -->
 
-
-    <PreferenceCategory
-        android:key="ambient_light"
-        android:title="@string/pulse_ambient_light_enable_title">
-
-        <com.aicp.gear.preference.SecureSettingSwitchPreference
-            android:key="doze_enabled"
-            android:defaultValue="false"
-            android:title="@string/doze_title"
-            android:summary="@string/doze_summary" />
-
-        <com.aicp.gear.preference.SystemSettingSwitchPreference
-            android:key="pulse_ambient_light"
-            android:defaultValue="false"
-            android:title="@string/pulse_ambient_light_title"
-            android:summary="@string/pulse_ambient_light_summary"
-            android:dependency="doze_enabled" />
-
-        <com.aicp.gear.preference.SystemSettingSwitchPreference
-            android:key="pulse_ambient_light_color_automatic"
-            android:defaultValue="false"
-            android:title="@string/pulse_ambient_light_color_automatic_title"
-            android:summary="@string/pulse_ambient_light_color_automatic_summary"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingIntListPreference
-            android:key="pulse_ambient_light_color_mode"
-            android:title="@string/pulse_ambient_light_color_mode_title"
-            android:entries="@array/pulse_ambient_light_color_mode_entries"
-            android:entryValues="@array/pulse_ambient_light_color_mode_values"
-            android:defaultValue="1"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingColorPickerPreference
-            android:key="pulse_ambient_light_color"
-            android:title="@string/pulse_ambient_light_color_title"
-            android:defaultValue="0xFF3980FF"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingSeekBarPreference
-            android:key="pulse_ambient_light_duration"
-            android:title="@string/pulse_ambient_light_duration_title"
-            android:max="10"
-            android:min="1"
-            aicpextras:unitsLeft=""
-            aicpextras:unitsRight="sec"
-            android:defaultValue="3"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingSeekBarPreference
-            android:key="pulse_ambient_light_repeat_count"
-            android:title="@string/pulse_ambient_light_repeat_count_title"
-            android:max="10"
-            android:min="0"
-            aicpextras:unitsLeft=""
-            aicpextras:unitsRight="times"
-            android:defaultValue="0"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingSwitchPreference
-            android:key="pulse_ambient_light_repeat_direction"
-            android:defaultValue="false"
-            android:title="@string/pulse_ambient_light_repeat_direction_title"
-            android:summary="@string/pulse_ambient_light_repeat_direction_summary"
-            android:dependency="pulse_ambient_light" />
-
-        <com.aicp.gear.preference.SystemSettingSeekBarPreference
-            android:key="pulse_ambient_light_width"
-            android:title="@string/pulse_ambient_light_width_title"
-            android:max="150"
-            android:min="1"
-            aicpextras:unitsLeft=""
-            aicpextras:unitsRight="px"
-            android:defaultValue="125"
-            android:dependency="pulse_ambient_light" />
-    </PreferenceCategory>
 
 </PreferenceScreen>

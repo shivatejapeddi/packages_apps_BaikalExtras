@@ -31,7 +31,6 @@ LOCAL_STATIC_ANDROID_LIBRARIES := \
     androidx.cardview_cardview \
     androidx.recyclerview_recyclerview \
     com.google.android.material_material \
-    com.aicp.settings.resources \
     AicpGear-preference \
     AicpGear-util
 

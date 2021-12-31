@@ -88,48 +88,6 @@ public class InterfaceTweaks extends BaseSettingsFragment {
 
         final PreferenceScreen screen = getPreferenceScreen();
 
-        boolean hasCutout = true; //mContext.getResources().getBoolean(com.android.internal.R.bool.config_physicalDisplayCutout);
-
-        mEdgeLightEnabledPref = (SwitchPreference) findPreference(PULSE_AMBIENT_LIGHT);
-        mEdgeLightColorPref = (SystemSettingColorPickerPreference) findPreference(PULSE_AMBIENT_LIGHT_COLOR);
-        mEdgeLightColorModePref = (ListPreference) findPreference(PULSE_AMBIENT_LIGHT_COLOR_MODE);
-
-        mEdgeLightColorModePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean edgeEnabled = Settings.System.getIntForUser(getActivity().getContentResolver(),
-                    Settings.System.PULSE_AMBIENT_LIGHT, 0, UserHandle.USER_CURRENT) == 1;
-
-                int edgeLightColorMode = Integer.parseInt(newValue.toString());
-
-                mEdgeLightColorPref.setEnabled(edgeLightColorMode==2&&edgeEnabled);
-                return true;
-            }
-        });
-
-        mEdgeLightEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                boolean edgeEnabled = (Boolean) newValue;
-
-                int edgeLightColorMode = Settings.System.getIntForUser(getActivity().getContentResolver(),
-                    Settings.System.PULSE_AMBIENT_LIGHT_COLOR_MODE, 1, UserHandle.USER_CURRENT);
-
-                mEdgeLightColorPref.setEnabled(edgeLightColorMode==2&&edgeEnabled);
-                return true;
-            }
-        });
-
-
-
-        try {
-
-            if( !hasCutout ) {
-                SwitchPreference pref = (SwitchPreference) findPreference(SYSTEM_TWEAKS_DLSB);
-                if( pref!=null ) {
-                    pref.setVisible(false);
-                }
-            }
-
             mDisableSecHwc = (SwitchPreference) findPreference(SYSTEM_TWEAKS_SEC_HWC);
             if( mDisableSecHwc != null ) { 
                 mDisableSecHwc.setChecked(SystemProperties.getBoolean(SYSTEM_PROPERTY_SEC_HWC, false));
@@ -146,73 +104,6 @@ public class InterfaceTweaks extends BaseSettingsFragment {
                     }
                 });
             }
-
-        } catch(Exception re) {
-            Log.e(TAG, "onCreate: Fatal! exception", re );
-        }
-
-        Resources sysui_res = null;
-        float density = Resources.getSystem().getDisplayMetrics().density;
-
-        try {
-            sysui_res = mContext.getPackageManager().getResourcesForApplication("com.android.systemui");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        final PreferenceCategory cornersCategory =
-                (PreferenceCategory) screen.findPreference("corners_category");
-
-
-        if( cornersCategory != null ) {
-            // Rounded Corner Radius
-            mCornerRadius = (SecureSettingSeekBarPreference) findPreference(SYSUI_ROUNDED_SIZE);
-            int resourceRadius = (int) mContext.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
-            int cornerRadius = Settings.Secure.getIntForUser(mContext.getContentResolver(), Settings.Secure.SYSUI_ROUNDED_SIZE,
-                    ((int) (resourceRadius / density)), UserHandle.USER_CURRENT);
-            mCornerRadius.setValue(cornerRadius);
-            mCornerRadius.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Settings.Secure.putIntForUser(getContext().getContentResolver(), Settings.Secure.SYSUI_ROUNDED_SIZE,
-                        Integer.parseInt(newValue.toString()), UserHandle.USER_CURRENT);
-                    return true;
-                }
-            });
-
-            // Rounded Content Padding
-            mContentPadding = (SecureSettingSeekBarPreference) findPreference(SYSUI_ROUNDED_CONTENT_PADDING);
-            int resourceIdPadding = sysui_res.getIdentifier("com.android.systemui:dimen/rounded_corner_content_padding", null,
-                    null);
-            int contentPadding = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING,
-                    (int) (sysui_res.getDimension(resourceIdPadding) / density), UserHandle.USER_CURRENT);
-            mContentPadding.setValue(contentPadding);
-            mContentPadding.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Settings.Secure.putIntForUser(getContext().getContentResolver(), Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING,
-                        Integer.parseInt(newValue.toString()), UserHandle.USER_CURRENT);
-                    return true;
-                }
-            });
-
-            // Rounded use Framework Values
-            mRoundedFwvals = (SwitchPreference) findPreference(SYSUI_ROUNDED_FWVALS);
-            mRoundedFwvals.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    try {
-                        Log.e(TAG, "mRoundedFwvals: enable=" + newValue.toString());
-                        ((SwitchPreference)preference).setChecked((Boolean) newValue);
-                        if( !(Boolean) newValue ) {
-                            restoreCorners();
-                        }
-                    } catch(Exception re) {
-                        Log.e(TAG, "onCreate: mRoundedFwvals Fatal! exception", re );
-                    }
-                    return false;
-                }
-            });
-        }
 
     }
 
@@ -241,21 +132,4 @@ public class InterfaceTweaks extends BaseSettingsFragment {
         SystemProperties.set(key, text);
     }
 
-    private void restoreCorners() {
-        Resources res = null;
-        float density = Resources.getSystem().getDisplayMetrics().density;
-        Context ctx = getContext();
-
-        try {
-            res = ctx.getPackageManager().getResourcesForApplication("com.android.systemui");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        int resourceIdRadius = (int) ctx.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
-        int resourceIdPadding = res.getIdentifier("com.android.systemui:dimen/rounded_corner_content_padding", null, null);
-        mCornerRadius.setValue((int) (resourceIdRadius / density));
-        mContentPadding.setValue((int) (res.getDimension(resourceIdPadding) / density));
-    }
 }

@@ -48,13 +48,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     protected int getThemeRes() {
-        int themePref = Settings.System.getInt(getContentResolver(), Settings.System.AE_THEME, 0);
-        switch (themePref) {
-            case 6:
-                return R.style.AppTheme_MoreAccent;
-            default:
                 return R.style.AppTheme;
-        }
     }
 
 }
